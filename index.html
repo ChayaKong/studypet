@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shenlong - Your Data Analyst Companion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .pet-name {
+            font-size: 2.5em;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pet-stage {
+            font-size: 1.2em;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .pet-display {
+            background: linear-gradient(45deg, #f7fafc, #edf2f7);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pet-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .pet-art {
+            font-size: 4em;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .pet-description {
+            font-size: 1.1em;
+            color: #4a5568;
+            line-height: 1.6;
+            max-width: 400px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #7c3aed;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 5px;
+        }
+
+        .stat-bar {
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #a855f7);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .stat-value {
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 25px 0;
+        }
+
+        .action-btn {
+            background: linear-gradient(45deg, #7c3aed, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .evolution-hint {
+            background: #fef5e7;
+            border: 2px dashed #f6ad55;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #744210;
+            font-style: italic;
+        }
+
+        .achievements {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .achievement {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 0 8px 8px 0;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .reset-btn {
+            background: #e53e3e;
+            margin-top: 20px;
+        }
+
+        .reset-btn:hover {
+            box-shadow: 0 8px 15px rgba(229, 62, 62, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="pet-name">神龙 Shenlong</h1>
+        <div class="pet-stage" id="petStage">Sparkling Egg</div>
+        
+        <div class="pet-display">
+            <div class="pet-art" id="petArt">🥚</div>
+            <div class="pet-description" id="petDescription">
+                A mystical egg shimmers with ancient wisdom, waiting for the spark of knowledge to awaken the dragon within.
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">SQL Mastery</div>
+                <div class="stat-bar"><div class="stat-fill" id="sqlFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="sqlValue">0 / 100 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Python Power</div>
+                <div class="stat-bar"><div class="stat-fill" id="pythonFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="pythonValue">0 / 100 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">NLP Knowledge</div>
+                <div class="stat-bar"><div class="stat-fill" id="nlpFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="nlpValue">0 / 100 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Portfolio Progress</div>
+                <div class="stat-bar"><div class="stat-fill" id="portfolioFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="portfolioValue">0 / 100 XP</div>
+            </div>
+        </div>
+
+        <div class="evolution-hint" id="evolutionHint">
+            🌟 <strong>Next Evolution:</strong> Reach 25 XP in any skill to awaken your dragon hatchling!
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-btn" onclick="addProgress('sql')">📊 Practiced SQL (+5 XP)</button>
+            <button class="action-btn" onclick="addProgress('python')">🐍 Coded Python (+5 XP)</button>
+            <button class="action-btn" onclick="addProgress('nlp')">🧠 Studied NLP (+5 XP)</button>
+            <button class="action-btn" onclick="addProgress('portfolio')">💼 Built Portfolio (+10 XP)</button>
+        </div>
+
+        <div class="achievements" id="achievements">
+            <h3 style="color: #4a5568; margin-bottom: 10px;">🏆 Recent Achievements</h3>
+        </div>
+
+        <button class="action-btn reset-btn" onclick="resetPet()">🔄 Reset Shenlong</button>
+    </div>
+
+    <script>
+        // Pet evolution stages
+        const evolutions = [
+            {
+                stage: "Sparkling Egg",
+                art: "🥚",
+                description: "A mystical egg shimmers with ancient wisdom, waiting for the spark of knowledge to awaken the dragon within.",
+                requirement: 0
+            },
+            {
+                stage: "Curious Hatchling",
+                art: "🐣",
+                description: "A tiny dragon emerges, eyes bright with curiosity. The wisdom of ages flows through its small form.",
+                requirement: 25
+            },
+            {
+                stage: "Knowledge Seeker",
+                art: "🐉",
+                description: "Growing stronger, your dragon seeks truth in data. Its scales shimmer with the colors of ancient scrolls.",
+                requirement: 100
+            },
+            {
+                stage: "Data Sage",
+                art: "🔮🐲",
+                description: "Wise and powerful, your dragon can see patterns in chaos. It carries the blessing of both Eastern wisdom and Western knowledge.",
+                requirement: 200
+            },
+            {
+                stage: "Master Analyst",
+                art: "👑🐲",
+                description: "A legendary being of pure analytical power. Your Shenlong has mastered the ancient art of data divination.",
+                requirement: 350
+            }
+        ];
+
+        // Load saved data
+        let petData = JSON.parse(localStorage.getItem('shenlongData')) || {
+            sql: 0,
+            python: 0,
+            nlp: 0,
+            portfolio: 0,
+            achievements: []
+        };
+
+        function saveData() {
+            localStorage.setItem('shenlongData', JSON.stringify(petData));
+        }
+
+        function updateDisplay() {
+            // Update stats
+            document.getElementById('sqlFill').style.width = (petData.sql % 100) + '%';
+            document.getElementById('pythonFill').style.width = (petData.python % 100) + '%';
+            document.getElementById('nlpFill').style.width = (petData.nlp % 100) + '%';
+            document.getElementById('portfolioFill').style.width = (petData.portfolio % 100) + '%';
+
+            document.getElementById('sqlValue').textContent = `${petData.sql} / 100 XP`;
+            document.getElementById('pythonValue').textContent = `${petData.python} / 100 XP`;
+            document.getElementById('nlpValue').textContent = `${petData.nlp} / 100 XP`;
+            document.getElementById('portfolioValue').textContent = `${petData.portfolio} / 100 XP`;
+
+            // Calculate total XP
+            const totalXP = petData.sql + petData.python + petData.nlp + petData.portfolio;
+
+            // Determine evolution stage
+            let currentEvolution = evolutions[0];
+            for (let i = evolutions.length - 1; i >= 0; i--) {
+                if (totalXP >= evolutions[i].requirement) {
+                    currentEvolution = evolutions[i];
+                    break;
+                }
+            }
+
+            document.getElementById('petStage').textContent = currentEvolution.stage;
+            document.getElementById('petArt').textContent = currentEvolution.art;
+            document.getElementById('petDescription').textContent = currentEvolution.description;
+
+            // Update evolution hint
+            const nextEvolution = evolutions.find(e => e.requirement > totalXP);
+            if (nextEvolution) {
+                const xpNeeded = nextEvolution.requirement - totalXP;
+                document.getElementById('evolutionHint').innerHTML = 
+                    `🌟 <strong>Next Evolution:</strong> ${nextEvolution.stage} - Need ${xpNeeded} more XP total!`;
+            } else {
+                document.getElementById('evolutionHint').innerHTML = 
+                    `🎉 <strong>Congratulations!</strong> Shenlong has reached maximum evolution!`;
+            }
+
+            // Update achievements
+            const achievementsDiv = document.getElementById('achievements');
+            const recentAchievements = petData.achievements.slice(-5).reverse();
+            
+            let achievementsHTML = '<h3 style="color: #4a5568; margin-bottom: 10px;">🏆 Recent Achievements</h3>';
+            if (recentAchievements.length === 0) {
+                achievementsHTML += '<p style="color: #718096; font-style: italic;">No achievements yet. Start coding to unlock them!</p>';
+            } else {
+                recentAchievements.forEach(achievement => {
+                    achievementsHTML += `<div class="achievement">${achievement}</div>`;
+                });
+            }
+            achievementsDiv.innerHTML = achievementsHTML;
+        }
+
+        function addProgress(skill) {
+            const xpGain = skill === 'portfolio' ? 10 : 5;
+            const oldTotal = petData.sql + petData.python + petData.nlp + petData.portfolio;
+            
+            petData[skill] += xpGain;
+            
+            const newTotal = petData.sql + petData.python + petData.nlp + petData.portfolio;
+            
+            // Check for achievements
+            const skillNames = {
+                sql: 'SQL',
+                python: 'Python',
+                nlp: 'NLP',
+                portfolio: 'Portfolio'
+            };
+
+            // Skill milestones
+            const milestones = [25, 50, 75, 100, 150, 200];
+            milestones.forEach(milestone => {
+                if (petData[skill] >= milestone && petData[skill] - xpGain < milestone) {
+                    petData.achievements.push(`🎯 Reached ${milestone} XP in ${skillNames[skill]}!`);
+                }
+            });
+
+            // Evolution achievements
+            evolutions.forEach(evolution => {
+                if (newTotal >= evolution.requirement && oldTotal < evolution.requirement) {
+                    petData.achievements.push(`🐲 Shenlong evolved into ${evolution.stage}!`);
+                }
+            });
+
+            // Special achievements
+            if (newTotal === 100 && oldTotal < 100) {
+                petData.achievements.push(`💫 First Century - Reached 100 total XP!`);
+            }
+            if (petData.sql >= 50 && petData.python >= 50 && petData.nlp >= 50 && petData.portfolio >= 50) {
+                if (!petData.achievements.includes('🌟 Balanced Master - 50+ XP in all skills!')) {
+                    petData.achievements.push('🌟 Balanced Master - 50+ XP in all skills!');
+                }
+            }
+
+            saveData();
+            updateDisplay();
+        }
+
+        function resetPet() {
+            if (confirm('Are you sure you want to reset Shenlong? This will erase all progress!')) {
+                petData = {
+                    sql: 0,
+                    python: 0,
+                    nlp: 0,
+                    portfolio: 0,
+                    achievements: ['🔄 Shenlong has been reborn - ready for a new journey!']
+                };
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
