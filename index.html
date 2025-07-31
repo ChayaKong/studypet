@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shenlong - Your Data Analyst Companion</title>
+    <title>MyStudyPet - Weekly Companion</title>
     <style>
         * {
             margin: 0;
@@ -26,7 +27,7 @@
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             text-align: center;
         }
@@ -41,8 +42,26 @@
         .pet-stage {
             font-size: 1.2em;
             color: #7c3aed;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-style: italic;
+        }
+
+        .pet-type {
+            font-size: 1em;
+            color: #718096;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .week-counter {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         .pet-display {
@@ -91,7 +110,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin: 25px 0;
         }
@@ -108,6 +127,7 @@
             font-weight: bold;
             color: #4a5568;
             margin-bottom: 5px;
+            font-size: 0.9em;
         }
 
         .stat-bar {
@@ -126,32 +146,53 @@
         }
 
         .stat-value {
-            font-size: 0.9em;
+            font-size: 0.8em;
             color: #718096;
         }
 
         .action-buttons {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
             margin: 25px 0;
+        }
+
+        .action-section {
+            margin: 15px 0;
+        }
+
+        .section-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 10px;
+            text-align: left;
         }
 
         .action-btn {
             background: linear-gradient(45deg, #7c3aed, #a855f7);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 10px 15px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 0.8em;
             font-weight: bold;
             transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
         }
 
         .action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(124, 58, 237, 0.3);
+        }
+
+        .big-task {
+            background: linear-gradient(45deg, #f6ad55, #ed8936);
+        }
+
+        .big-task:hover {
+            box-shadow: 0 8px 15px rgba(237, 137, 54, 0.3);
         }
 
         .evolution-hint {
@@ -186,134 +227,280 @@
         .reset-btn {
             background: #e53e3e;
             margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 1em;
         }
 
         .reset-btn:hover {
             box-shadow: 0 8px 15px rgba(229, 62, 62, 0.3);
         }
+
+        .total-progress {
+            background: linear-gradient(45deg, #4299e1, #3182ce);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="pet-name">神龙 Shenlong</h1>
-        <div class="pet-stage" id="petStage">Sparkling Egg</div>
+        <h1 class="pet-name">MyStudyPet</h1>
+        <div class="week-counter" id="weekCounter">Week 1</div>
+        <div class="pet-stage" id="petStage">Tiny Egg</div>
+        <div class="pet-type" id="petType">Mysterious Creature</div>
         
         <div class="pet-display">
             <div class="pet-art" id="petArt">🥚</div>
             <div class="pet-description" id="petDescription">
-                A mystical egg shimmers with ancient wisdom, waiting for the spark of knowledge to awaken the dragon within.
+                A mysterious egg pulses with potential, waiting for your dedication to reveal what magical creature lies within.
             </div>
+        </div>
+
+        <div class="total-progress" id="totalProgress">
+            Total Progress: 0 / 3000 XP (0%)
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label">SQL Mastery</div>
+                <div class="stat-label">📊 SQL Mastery</div>
                 <div class="stat-bar"><div class="stat-fill" id="sqlFill" style="width: 0%"></div></div>
-                <div class="stat-value" id="sqlValue">0 / 100 XP</div>
+                <div class="stat-value" id="sqlValue">0 / 500 XP</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Python Power</div>
+                <div class="stat-label">🐍 Python Power</div>
                 <div class="stat-bar"><div class="stat-fill" id="pythonFill" style="width: 0%"></div></div>
-                <div class="stat-value" id="pythonValue">0 / 100 XP</div>
+                <div class="stat-value" id="pythonValue">0 / 500 XP</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">NLP Knowledge</div>
+                <div class="stat-label">🧠 NLP Knowledge</div>
                 <div class="stat-bar"><div class="stat-fill" id="nlpFill" style="width: 0%"></div></div>
-                <div class="stat-value" id="nlpValue">0 / 100 XP</div>
+                <div class="stat-value" id="nlpValue">0 / 500 XP</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Portfolio Progress</div>
+                <div class="stat-label">💼 Portfolio</div>
                 <div class="stat-bar"><div class="stat-fill" id="portfolioFill" style="width: 0%"></div></div>
-                <div class="stat-value" id="portfolioValue">0 / 100 XP</div>
+                <div class="stat-value" id="portfolioValue">0 / 500 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">💼 Work Tasks</div>
+                <div class="stat-bar"><div class="stat-fill" id="workFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="workValue">0 / 500 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🏠 Chores</div>
+                <div class="stat-bar"><div class="stat-fill" id="choresFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="choresValue">0 / 500 XP</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">💪 Health</div>
+                <div class="stat-bar"><div class="stat-fill" id="healthFill" style="width: 0%"></div></div>
+                <div class="stat-value" id="healthValue">0 / 500 XP</div>
             </div>
         </div>
 
         <div class="evolution-hint" id="evolutionHint">
-            🌟 <strong>Next Evolution:</strong> Reach 25 XP in any skill to awaken your dragon hatchling!
+            🌟 <strong>Next Evolution:</strong> Reach 300 total XP to see your creature hatch!
         </div>
 
-        <div class="action-buttons">
-            <button class="action-btn" onclick="addProgress('sql')">📊 Practiced SQL (+5 XP)</button>
-            <button class="action-btn" onclick="addProgress('python')">🐍 Coded Python (+5 XP)</button>
-            <button class="action-btn" onclick="addProgress('nlp')">🧠 Studied NLP (+5 XP)</button>
-            <button class="action-btn" onclick="addProgress('portfolio')">💼 Built Portfolio (+10 XP)</button>
+        <div class="action-section">
+            <div class="section-title">📚 Study Activities</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="addProgress('sql', 5)">SQL Practice (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('sql', 10)">SQL Project (+10)</button>
+                <button class="action-btn" onclick="addProgress('python', 5)">Python Code (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('python', 10)">Python Project (+10)</button>
+                <button class="action-btn" onclick="addProgress('nlp', 5)">NLP Study (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('nlp', 10)">NLP Implementation (+10)</button>
+                <button class="action-btn" onclick="addProgress('portfolio', 5)">Portfolio Work (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('portfolio', 10)">Portfolio Complete (+10)</button>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <div class="section-title">💼 Work & Life</div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="addProgress('work', 5)">Work Task (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('work', 10)">Big Work Project (+10)</button>
+                <button class="action-btn" onclick="addProgress('chores', 5)">Small Chore (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('chores', 10)">Deep Clean (+10)</button>
+                <button class="action-btn" onclick="addProgress('health', 5)">Exercise (+5)</button>
+                <button class="action-btn big-task" onclick="addProgress('health', 10)">Long Workout (+10)</button>
+            </div>
         </div>
 
         <div class="achievements" id="achievements">
             <h3 style="color: #4a5568; margin-bottom: 10px;">🏆 Recent Achievements</h3>
         </div>
 
-        <button class="action-btn reset-btn" onclick="resetPet()">🔄 Reset Shenlong</button>
+        <button class="action-btn reset-btn" onclick="resetPet()">🔄 New Week - New Pet!</button>
     </div>
 
     <script>
-        // Pet evolution stages
-        const evolutions = [
+        // Pet types with different evolution paths
+        const petTypes = [
             {
-                stage: "Sparkling Egg",
-                art: "🥚",
-                description: "A mystical egg shimmers with ancient wisdom, waiting for the spark of knowledge to awaken the dragon within.",
-                requirement: 0
+                name: "Chinese Dragon",
+                type: "Mystical Eastern Dragon",
+                evolutions: [
+                    { stage: "Tiny Egg", art: "🥚", description: "A jade egg shimmers with ancient wisdom.", requirement: 0 },
+                    { stage: "Dragon Hatchling", art: "🐣", description: "A tiny dragon emerges, scales glowing with promise.", requirement: 300 },
+                    { stage: "Young Dragon", art: "🐉", description: "Growing wings spread wide, eyes bright with intelligence.", requirement: 800 },
+                    { stage: "Wise Dragon", art: "🔮🐲", description: "Ancient wisdom flows through this majestic creature.", requirement: 1500 },
+                    { stage: "Master Dragon", art: "👑🐲", description: "A legendary being of pure knowledge and power.", requirement: 2500 }
+                ]
             },
             {
-                stage: "Curious Hatchling",
-                art: "🐣",
-                description: "A tiny dragon emerges, eyes bright with curiosity. The wisdom of ages flows through its small form.",
-                requirement: 25
+                name: "Lion of Judah",
+                type: "Magnificent Royal Lion",
+                evolutions: [
+                    { stage: "Golden Egg", art: "🥚", description: "A golden egg radiates royal strength and courage.", requirement: 0 },
+                    { stage: "Lion Cub", art: "🦁", description: "A brave little cub with a mighty roar.", requirement: 300 },
+                    { stage: "Young Lion", art: "🦁✨", description: "Mane growing proudly, courage building daily.", requirement: 800 },
+                    { stage: "Royal Lion", art: "👑🦁", description: "Crowned with wisdom, leading with strength.", requirement: 1500 },
+                    { stage: "Lion of Judah", art: "🏛️👑🦁", description: "Majestic ruler, protector of knowledge and justice.", requirement: 2500 }
+                ]
             },
             {
-                stage: "Knowledge Seeker",
-                art: "🐉",
-                description: "Growing stronger, your dragon seeks truth in data. Its scales shimmer with the colors of ancient scrolls.",
-                requirement: 100
+                name: "Magical Unicorn",
+                type: "Girly Dream Unicorn",
+                evolutions: [
+                    { stage: "Sparkly Egg", art: "🥚", description: "A pastel egg sparkles with magical fairy dust.", requirement: 0 },
+                    { stage: "Baby Unicorn", art: "🦄", description: "Tiny horn glowing, ready to spread magic everywhere!", requirement: 300 },
+                    { stage: "Pretty Unicorn", art: "🦄✨", description: "Rainbow mane flowing, spreading joy and wonder.", requirement: 800 },
+                    { stage: "Fairy Unicorn", art: "🧚‍♀️🦄", description: "Wings of light, bringing dreams to life.", requirement: 1500 },
+                    { stage: "Dream Princess", art: "👸🦄🌈", description: "Ultimate magical being, guardian of hopes and dreams.", requirement: 2500 }
+                ]
             },
             {
-                stage: "Data Sage",
-                art: "🔮🐲",
-                description: "Wise and powerful, your dragon can see patterns in chaos. It carries the blessing of both Eastern wisdom and Western knowledge.",
-                requirement: 200
+                name: "Fluffy Sheep",
+                type: "Peaceful Meadow Sheep",
+                evolutions: [
+                    { stage: "Wooly Egg", art: "🥚", description: "A soft, warm egg nestled in imaginary grass.", requirement: 0 },
+                    { stage: "Little Lamb", art: "🐑", description: "Adorable lamb bouncing through green meadows.", requirement: 300 },
+                    { stage: "Fluffy Sheep", art: "🐑🌱", description: "Content sheep grazing peacefully, wool soft as clouds.", requirement: 800 },
+                    { stage: "Wise Shepherd", art: "🐑📚", description: "Leading the flock with gentle wisdom and care.", requirement: 1500 },
+                    { stage: "Guardian Sheep", art: "👑🐑🌿", description: "Protector of peace, bringing calm to all around.", requirement: 2500 }
+                ]
             },
             {
-                stage: "Master Analyst",
-                art: "👑🐲",
-                description: "A legendary being of pure analytical power. Your Shenlong has mastered the ancient art of data divination.",
-                requirement: 350
+                name: "Phoenix",
+                type: "Fiery Rebirth Bird",
+                evolutions: [
+                    { stage: "Ember Egg", art: "🥚", description: "A warm egg glows with inner fire and potential.", requirement: 0 },
+                    { stage: "Fire Chick", art: "🐣", description: "Tiny flames dance around this brave little bird.", requirement: 300 },
+                    { stage: "Young Phoenix", art: "🔥🐦", description: "Wings spread wide, ready to soar through challenges.", requirement: 800 },
+                    { stage: "Blazing Phoenix", art: "🔥🦅", description: "Magnificent bird of fire, rising above all obstacles.", requirement: 1500 },
+                    { stage: "Eternal Phoenix", art: "👑🔥🦅", description: "Immortal guardian, forever renewed through learning.", requirement: 2500 }
+                ]
+            },
+            {
+                name: "Wise Owl",
+                type: "Scholar of the Night",
+                evolutions: [
+                    { stage: "Moonlit Egg", art: "🥚", description: "A silvery egg glows with nocturnal wisdom.", requirement: 0 },
+                    { stage: "Owlet", art: "🦉", description: "Big eyes full of curiosity, ready to learn everything.", requirement: 300 },
+                    { stage: "Scholar Owl", art: "🦉📖", description: "Perched with books, absorbing knowledge day and night.", requirement: 800 },
+                    { stage: "Wise Sage", art: "🎓🦉", description: "Graduation cap worn proudly, wisdom beyond measure.", requirement: 1500 },
+                    { stage: "Oracle Owl", art: "🔮🦉📚", description: "All-knowing guardian of ancient and modern knowledge.", requirement: 2500 }
+                ]
+            },
+            {
+                name: "Butterfly",
+                type: "Transformation Spirit",
+                evolutions: [
+                    { stage: "Chrysalis Egg", art: "🥚", description: "A delicate egg holds the promise of beautiful change.", requirement: 0 },
+                    { stage: "Tiny Caterpillar", art: "🐛", description: "Small but determined, growing stronger each day.", requirement: 300 },
+                    { stage: "In Chrysalis", art: "🛡️", description: "Transforming within, preparing for something beautiful.", requirement: 800 },
+                    { stage: "Beautiful Butterfly", art: "🦋", description: "Wings spread wide, dancing through life with grace.", requirement: 1500 },
+                    { stage: "Rainbow Butterfly", art: "🌈🦋", description: "Radiant being of pure transformation and beauty.", requirement: 2500 }
+                ]
+            },
+            {
+                name: "Sea Turtle",
+                type: "Ancient Ocean Wisdom",
+                evolutions: [
+                    { stage: "Sandy Egg", art: "🥚", description: "Buried in warm sand, dreaming of ocean adventures.", requirement: 0 },
+                    { stage: "Baby Turtle", art: "🐢", description: "Racing toward the sea of knowledge with determination.", requirement: 300 },
+                    { stage: "Swimming Turtle", art: "🐢🌊", description: "Gracefully navigating the currents of learning.", requirement: 800 },
+                    { stage: "Ancient Turtle", art: "🗿🐢", description: "Carrying centuries of wisdom on your sturdy shell.", requirement: 1500 },
+                    { stage: "Ocean Guardian", art: "👑🐢🌊", description: "Eternal protector of deep knowledge and patience.", requirement: 2500 }
+                ]
+            },
+            {
+                name: "Tree Spirit",
+                type: "Growing Nature Wisdom",
+                evolutions: [
+                    { stage: "Magic Seed", art: "🥚", description: "A glowing seed ready to grow into something amazing.", requirement: 0 },
+                    { stage: "Little Sprout", art: "🌱", description: "First leaves reaching toward the light of knowledge.", requirement: 300 },
+                    { stage: "Young Tree", art: "🌿", description: "Growing strong, branches reaching for new learning.", requirement: 800 },
+                    { stage: "Wise Tree", art: "🌳", description: "Deep roots of knowledge, branches touching the sky.", requirement: 1500 },
+                    { stage: "Ancient Oak", art: "👑🌳", description: "Timeless guardian of wisdom, shelter for all learners.", requirement: 2500 }
+                ]
+            },
+            {
+                name: "Crystal Cat",
+                type: "Mystical Feline Guide",
+                evolutions: [
+                    { stage: "Crystal Egg", art: "🥚", description: "A shimmering egg that purrs with mysterious energy.", requirement: 0 },
+                    { stage: "Magic Kitten", art: "🐱", description: "Playful kitten with eyes that sparkle like gems.", requirement: 300 },
+                    { stage: "Crystal Cat", art: "💎🐱", description: "Graceful feline with crystalline fur that catches light.", requirement: 800 },
+                    { stage: "Mystic Guardian", art: "🔮🐱", description: "All-seeing cat guardian with ancient magical powers.", requirement: 1500 },
+                    { stage: "Celestial Cat", art: "⭐🐱👑", description: "Divine feline spirit, guiding souls through knowledge.", requirement: 2500 }
+                ]
             }
         ];
 
-        // Load saved data
-        let petData = JSON.parse(localStorage.getItem('shenlongData')) || {
+        // Load saved data or create new
+        let petData = JSON.parse(localStorage.getItem('myStudyPetData')) || {
             sql: 0,
             python: 0,
             nlp: 0,
             portfolio: 0,
-            achievements: []
+            work: 0,
+            chores: 0,
+            health: 0,
+            achievements: [],
+            weekNumber: 1,
+            petTypeIndex: Math.floor(Math.random() * petTypes.length)
         };
 
         function saveData() {
-            localStorage.setItem('shenlongData', JSON.stringify(petData));
+            localStorage.setItem('myStudyPetData', JSON.stringify(petData));
+        }
+
+        function getCurrentPetType() {
+            return petTypes[petData.petTypeIndex];
         }
 
         function updateDisplay() {
-            // Update stats
-            document.getElementById('sqlFill').style.width = (petData.sql % 100) + '%';
-            document.getElementById('pythonFill').style.width = (petData.python % 100) + '%';
-            document.getElementById('nlpFill').style.width = (petData.nlp % 100) + '%';
-            document.getElementById('portfolioFill').style.width = (petData.portfolio % 100) + '%';
+            const currentPet = getCurrentPetType();
+            
+            // Update pet info
+            document.getElementById('petType').textContent = currentPet.type;
+            document.getElementById('weekCounter').textContent = `Week ${petData.weekNumber}`;
 
-            document.getElementById('sqlValue').textContent = `${petData.sql} / 100 XP`;
-            document.getElementById('pythonValue').textContent = `${petData.python} / 100 XP`;
-            document.getElementById('nlpValue').textContent = `${petData.nlp} / 100 XP`;
-            document.getElementById('portfolioValue').textContent = `${petData.portfolio} / 100 XP`;
+            // Update stats
+            const skills = ['sql', 'python', 'nlp', 'portfolio', 'work', 'chores', 'health'];
+            skills.forEach(skill => {
+                const fillPercent = (petData[skill] / 500) * 100;
+                document.getElementById(skill + 'Fill').style.width = Math.min(fillPercent, 100) + '%';
+                document.getElementById(skill + 'Value').textContent = `${petData[skill]} / 500 XP`;
+            });
 
             // Calculate total XP
-            const totalXP = petData.sql + petData.python + petData.nlp + petData.portfolio;
+            const totalXP = skills.reduce((sum, skill) => sum + petData[skill], 0);
+            const totalPercent = Math.round((totalXP / 3500) * 100);
+            document.getElementById('totalProgress').textContent = 
+                `Total Progress: ${totalXP} / 3500 XP (${totalPercent}%)`;
 
             // Determine evolution stage
-            let currentEvolution = evolutions[0];
-            for (let i = evolutions.length - 1; i >= 0; i--) {
-                if (totalXP >= evolutions[i].requirement) {
-                    currentEvolution = evolutions[i];
+            let currentEvolution = currentPet.evolutions[0];
+            for (let i = currentPet.evolutions.length - 1; i >= 0; i--) {
+                if (totalXP >= currentPet.evolutions[i].requirement) {
+                    currentEvolution = currentPet.evolutions[i];
                     break;
                 }
             }
@@ -323,14 +510,14 @@
             document.getElementById('petDescription').textContent = currentEvolution.description;
 
             // Update evolution hint
-            const nextEvolution = evolutions.find(e => e.requirement > totalXP);
+            const nextEvolution = currentPet.evolutions.find(e => e.requirement > totalXP);
             if (nextEvolution) {
                 const xpNeeded = nextEvolution.requirement - totalXP;
                 document.getElementById('evolutionHint').innerHTML = 
-                    `🌟 <strong>Next Evolution:</strong> ${nextEvolution.stage} - Need ${xpNeeded} more XP total!`;
+                    `🌟 <strong>Next Evolution:</strong> ${nextEvolution.stage} - Need ${xpNeeded} more XP!`;
             } else {
                 document.getElementById('evolutionHint').innerHTML = 
-                    `🎉 <strong>Congratulations!</strong> Shenlong has reached maximum evolution!`;
+                    `🎉 <strong>Congratulations!</strong> Your ${currentPet.name} has reached maximum evolution!`;
             }
 
             // Update achievements
@@ -339,7 +526,7 @@
             
             let achievementsHTML = '<h3 style="color: #4a5568; margin-bottom: 10px;">🏆 Recent Achievements</h3>';
             if (recentAchievements.length === 0) {
-                achievementsHTML += '<p style="color: #718096; font-style: italic;">No achievements yet. Start coding to unlock them!</p>';
+                achievementsHTML += '<p style="color: #718096; font-style: italic;">No achievements yet. Start your weekly journey!</p>';
             } else {
                 recentAchievements.forEach(achievement => {
                     achievementsHTML += `<div class="achievement">${achievement}</div>`;
@@ -348,44 +535,58 @@
             achievementsDiv.innerHTML = achievementsHTML;
         }
 
-        function addProgress(skill) {
-            const xpGain = skill === 'portfolio' ? 10 : 5;
-            const oldTotal = petData.sql + petData.python + petData.nlp + petData.portfolio;
+        function addProgress(skill, xp) {
+            const currentPet = getCurrentPetType();
+            const oldTotal = Object.keys(petData).filter(k => !['achievements', 'weekNumber', 'petTypeIndex'].includes(k))
+                .reduce((sum, skill) => sum + petData[skill], 0);
             
-            petData[skill] += xpGain;
+            petData[skill] = Math.min(petData[skill] + xp, 500);
             
-            const newTotal = petData.sql + petData.python + petData.nlp + petData.portfolio;
+            const newTotal = Object.keys(petData).filter(k => !['achievements', 'weekNumber', 'petTypeIndex'].includes(k))
+                .reduce((sum, skill) => sum + petData[skill], 0);
             
             // Check for achievements
             const skillNames = {
                 sql: 'SQL',
                 python: 'Python',
                 nlp: 'NLP',
-                portfolio: 'Portfolio'
+                portfolio: 'Portfolio',
+                work: 'Work',
+                chores: 'Chores',
+                health: 'Health'
             };
 
             // Skill milestones
-            const milestones = [25, 50, 75, 100, 150, 200];
+            const milestones = [50, 100, 200, 300, 400, 500];
             milestones.forEach(milestone => {
-                if (petData[skill] >= milestone && petData[skill] - xpGain < milestone) {
+                if (petData[skill] >= milestone && petData[skill] - xp < milestone) {
                     petData.achievements.push(`🎯 Reached ${milestone} XP in ${skillNames[skill]}!`);
                 }
             });
 
             // Evolution achievements
-            evolutions.forEach(evolution => {
+            currentPet.evolutions.forEach(evolution => {
                 if (newTotal >= evolution.requirement && oldTotal < evolution.requirement) {
-                    petData.achievements.push(`🐲 Shenlong evolved into ${evolution.stage}!`);
+                    petData.achievements.push(`🐲 Your ${currentPet.name} evolved into ${evolution.stage}!`);
                 }
             });
 
             // Special achievements
-            if (newTotal === 100 && oldTotal < 100) {
-                petData.achievements.push(`💫 First Century - Reached 100 total XP!`);
+            if (newTotal >= 1000 && oldTotal < 1000) {
+                petData.achievements.push(`💫 Milestone Master - Reached 1000 total XP!`);
             }
-            if (petData.sql >= 50 && petData.python >= 50 && petData.nlp >= 50 && petData.portfolio >= 50) {
-                if (!petData.achievements.includes('🌟 Balanced Master - 50+ XP in all skills!')) {
-                    petData.achievements.push('🌟 Balanced Master - 50+ XP in all skills!');
+            if (newTotal >= 2000 && oldTotal < 2000) {
+                petData.achievements.push(`⭐ Excellence Expert - Reached 2000 total XP!`);
+            }
+            if (newTotal >= 3000 && oldTotal < 3000) {
+                petData.achievements.push(`🏆 Ultimate Achiever - Reached 3000 total XP!`);
+            }
+
+            // Check if all skills have significant progress
+            const skills = ['sql', 'python', 'nlp', 'portfolio', 'work', 'chores', 'health'];
+            if (skills.every(s => petData[s] >= 100)) {
+                if (!petData.achievements.includes('🌟 Well-Rounded Master - 100+ XP in all areas!')) {
+                    petData.achievements.push('🌟 Well-Rounded Master - 100+ XP in all areas!');
                 }
             }
 
@@ -394,13 +595,21 @@
         }
 
         function resetPet() {
-            if (confirm('Are you sure you want to reset Shenlong? This will erase all progress!')) {
+            if (confirm(`Are you sure you want to start a new week? This will reset all progress and give you a new random pet!`)) {
+                const newPetIndex = Math.floor(Math.random() * petTypes.length);
+                const newPetName = petTypes[newPetIndex].name;
+                
                 petData = {
                     sql: 0,
                     python: 0,
                     nlp: 0,
                     portfolio: 0,
-                    achievements: ['🔄 Shenlong has been reborn - ready for a new journey!']
+                    work: 0,
+                    chores: 0,
+                    health: 0,
+                    achievements: [`🔄 Week ${petData.weekNumber + 1} begins! Meet your new ${newPetName}!`],
+                    weekNumber: petData.weekNumber + 1,
+                    petTypeIndex: newPetIndex
                 };
                 saveData();
                 updateDisplay();
